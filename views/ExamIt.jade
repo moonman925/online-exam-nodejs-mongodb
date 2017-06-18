@@ -1,0 +1,676 @@
+extends layout
+
+block content
+    if !user
+        h1 Home Page
+        p.lead Java Exam 祝你成功
+        hr
+        .row
+            .col-sm-6
+                h2 欢迎!
+                h3 登陆进行答卷
+    else
+        h1 欢迎您，尊贵的 #{user.email}!
+        ul#myTab.nav.nav-tabs
+            li.active
+                a(href='#home', data-toggle='tab')
+                    | 考生注意
+            li
+                a(href='#lowE', data-toggle='tab' id='lowExam') 低级考试
+            li
+                a(href='#midE', data-toggle='tab') 中级考试
+            li
+                a(href='#highE',  data-toggle='tab') 高级考试
+        #myTabContent.tab-content
+            #home.tab-pane.fade.in.active
+                h3
+                    | 你知道吗？Java是这个世界上最热门的框架，呸，语言
+                h4
+                    | 希望大家通过这次考试，看清楚自己是有多么的不适合Java
+                h4
+                    | 祝你好运！
+                img(src='/build/jiawa.png', alt='java-pic')
+            #lowE.tab-pane.fade
+                html
+                    body
+                        // Jquery
+                        script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+                        // 最新版本的 Bootstrap 核心 CSS 文件
+                        link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css', integrity='`sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+                        // 可选的 Bootstrap 主题文件（一般不用引入）
+                        link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css', integrity='sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp', crossorigin='anonymous')
+                        // 最新的 Bootstrap 核心 JavaScript 文件
+                        script(src='https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+                        link(rel='stylesheet', href='http://www.bootcss.com/p/buttons/css/buttons.css')
+                        link(rel='stylesheet', href='/build/style.css')
+                        script(src='https://unpkg.com/vue@2.3.4')
+                        script(src='/build/countDown.js')
+                        script(src='/build/react.js')
+                        script(src='/build/reactToJson.js')
+                        #wrapContent
+                            h3 欢迎来到低级考试
+                            h3 当你准备好了，请按下面的GO
+                            h3 请认真阅读下面的内容
+                            h3 你将受益终生
+                            h5 1.点击"GO"之后计时器会开始计时
+                            h5 2.超出计时时间将没有分数
+                            h5 3.你将有5分钟答题时间
+                            h5 4.题目均为单选题
+                            h5 5.诚信考试，禁止百度
+                            a#showDiv.button.button-royal.button-pill.button-giant Go
+                            #countdown
+                            #lowEx
+                        script.
+                            var _timeOut = false;
+                            var counting = $('#countdown').countdown360({
+                                radius: 60.5,
+                                seconds: 30,
+                                strokeWidth: 15,
+                                fillStyle: '#2196f3',
+                                strokeStyle: '#ffeb3b',
+                                fontSize: 50,
+                                fontColor: '#ffffff',
+                                autostart: false,
+                                smooth: true,
+                                onComplete: function () {
+                                    alert("时辰到")
+                                    _timeOut = true;
+                                }
+                            })
+                            var _grade=0;
+
+                            var submit = function (values) {
+                                if(!_timeOut){
+                                    for (var i_temp = 0; i_temp < 2; i_temp++) {
+                                        if (values[i_temp] == 'right') {
+                                            _grade = _grade + 10
+                                        }
+                                    }
+                                }
+                                else _grade=0;
+
+                                alert("你的成绩为"+_grade+"分，满分100分")
+                                localStorage.setItem("#{user.email}"+"low",_grade)
+                                counting.stop();
+                            }
+                            var data = {
+                                'schema': [
+                                    {
+                                        'type': 'radio',
+                                        'label': '1. 下列不可作为java语言修饰符的是',
+                                        'data': [
+                                            {'value': '1', 'label': 'a1'},
+                                            {'value': '2', 'label': '$1'},
+                                            {'value': '3', 'label': '_1'},
+                                            {'value': 'right', 'label': '11'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '2. 有一段java 应用程序，它的主类名是a1，那么保存它的源文件名可以是',
+                                        'data': [
+                                            {'value': 'right', 'label': 'a1.java'},
+                                            {'value': '2', 'label': 'a1.class'},
+                                            {'value': '3', 'label': 'a1'},
+                                            {'value': '4', 'label': '都对'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '3. 整型数据类型中，需要内存空间最少的是',
+                                        'data': [
+                                            {'value': '1', 'label': 'short'},
+                                            {'value': '2', 'label': 'long'},
+                                            {'value': '3', 'label': 'int'},
+                                            {'value': 'right', 'label': 'byte'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '4. Java 类可以作为',
+                                        'data': [
+                                            {'value': '1', 'label': '类型定义机制'},
+                                            {'value': '2', 'label': '数据封装机制'},
+                                            {'value': 'right', 'label': '类型定义机制和数据封装机制'},
+                                            {'value': '4', 'label': '上述都不对'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '5. 在创建对象时必须',
+                                        'data': [
+                                            {'value': '1', 'label': '先声明对象，然后才能使用对象'},
+                                            {'value': '2', 'label': '先声明对象，为对象分配内存空间，然后才能使用对象'},
+                                            {'value': 'right', 'label': '先声明对象，为对象分配内存空间，对对象初始化，然后才能使用对象'},
+                                            {'value': '4', 'label': '上述说法都对'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '6. 在调用方法时，若要使方法改变实参的值，可以',
+                                        'data': [
+                                            {'value': '1', 'label': '用基本数据类型作为参数'},
+                                            {'value': 'right', 'label': '用对象作为参数'},
+                                            {'value': '3', 'label': 'A和B都对'},
+                                            {'value': '4', 'label': 'A和B都不对'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '7. java中',
+                                        'data': [
+                                            {'value': '1', 'label': '一个子类可以有多个父类，一个父类也可以有多个子类'},
+                                            {'value': '2', 'label': '一个子类可以有多个父类，但一个父类只可以有一个子类'},
+                                            {'value': 'right', 'label': '一个子类可以有一个父类，但一个父类可以有多个子类'},
+                                            {'value': '4', 'label': '上述说法都不对'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '8. Java语言具有许多优点和特点，哪个反映了Java程序并行机制的特点？',
+                                        'data': [
+                                            {'value': '1', 'label': '安全性'},
+                                            {'value': 'right', 'label': '多线性'},
+                                            {'value': '3', 'label': '跨平台'},
+                                            {'value': '4', 'label': '可移植'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '9. Character流与Byte流的区别是',
+                                        'data': [
+                                            {'value': '1', 'label': '每次读入的字节数不同'},
+                                            {'value': '2', 'label': '前者带有缓冲，后者没有'},
+                                            {'value': 'right', 'label': '前者是字符读写，后者是字节读写'},
+                                            {'value': '4', 'label': '二者没有区别，可以互换使用'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '10. 以下声明合法的是',
+                                        'data': [
+                                            {'value': '1', 'label': 'default  String  s;'},
+                                            {'value': '2', 'label': 'public  final  static  native  int  w( )'},
+                                            {'value': '3', 'label': 'abstract  double  d;'},
+                                            {'value': 'right', 'label': 'abstract  final  double  hyperbolicCosine( )'}
+                                        ]
+                                    }
+                                ],
+                                'title': '低级考试',
+                                'submitButton': {
+                                    'text': 'Send'
+                                },
+                                'onSubmit': submit
+                            }
+                            //checkbox compare length
+                            React.renderComponent(
+                                FormView({data: data}), document.getElementById('lowEx')
+                            );
+                            counting.stop();
+                            $('#lowEx').hide()
+                            $('#showDiv').click(function () {
+                                $('#showDiv').hide();
+                                $('#lowEx').show();
+                                counting.start();
+                            })
+
+
+
+            #midE.tab-pane.fade
+                html
+                    body
+                        // Jquery
+                        script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+                        // 最新版本的 Bootstrap 核心 CSS 文件
+                        link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css', integrity='`sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+                        // 可选的 Bootstrap 主题文件（一般不用引入）
+                        link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css', integrity='sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp', crossorigin='anonymous')
+                        // 最新的 Bootstrap 核心 JavaScript 文件
+                        script(src='https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+                        link(rel='stylesheet', href='http://www.bootcss.com/p/buttons/css/buttons.css')
+                        link(rel='stylesheet', href='/build/style.css')
+                        script(src='https://unpkg.com/vue@2.3.4')
+                        script(src='/build/countDown.js')
+                        script(src='/build/react.js')
+                        script(src='/build/reactToJson.js')
+                        #wrapContent
+                            h3 欢迎来到中级考试
+                            h3 当你准备好了，请按下面的GO
+                            h3 请认真阅读下面的内容
+                            h3 你将受益终生
+                            h5 1.点击"GO"之后计时器会开始计时
+                            h5 2.超出计时时间将没有分数
+                            h5 3.你将有5分钟答题时间
+                            h5 4.题目均为单选题
+                            h5 5.诚信考试，禁止百度
+                            a#showDiv2.button.button-primary.button-pill.button-giant Go
+                            #countdown2
+                            #midEx
+                        script.
+                            var _timeOut = false;
+                            var counting2 = $('#countdown2').countdown360({
+                                radius: 60.5,
+                                seconds: 30,
+                                strokeWidth: 15,
+                                fillStyle: '#2196f3',
+                                strokeStyle: '#ffeb3b',
+                                fontSize: 50,
+                                fontColor: '#ffffff',
+                                autostart: false,
+                                smooth: true,
+                                onComplete: function () {
+                                    alert("时辰到")
+                                    _timeOut = true;
+                                }
+                            })
+                            var _grade = 0;
+
+                            var submit2 = function (values) {
+                                if (!_timeOut) {
+                                    for (var i_temp = 0; i_temp < 2; i_temp++) {
+                                        if (values[i_temp] == 'right') {
+                                            _grade = _grade + 10
+                                        }
+                                    }
+                                }
+                                else _grade = 0;
+
+                                alert("你的成绩为"+_grade+"分，满分100分")
+                                localStorage.setItem("#{user.email}"+"mid", _grade)
+                                counting2.stop();
+                            }
+                            var data = {
+                                'schema': [
+                                    {
+                                        'type': 'radio',
+                                        'label': '1.  Java application中的主类需包含main方法，main方法的返回类型是什么？',
+                                        'data': [
+                                            {'value': '1', 'label': 'int'},
+                                            {'value': '2', 'label': 'float'},
+                                            {'value': '3', 'label': 'double'},
+                                            {'value': 'right', 'label': 'void'}
+                                        ]
+                                    },
+
+                            {
+                                'type': 'radio',
+                                'label': '2. 以下哪个方法用于定义线程的执行体？',
+                                'data': [
+                                    {'value': '1', 'label': 'start()'},
+                                    {'value': '2', 'label': 'init()'},
+                                    {'value': 'right', 'label': 'run()'},
+                                    {'value': '4', 'label': 'synchronized()'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '3. 以下关于构造函数的描述错误的是',
+                                    'data'
+                            :
+                                [
+                                    {'value': 'right', 'label': '构造函数的返回类型只能是void型'},
+                                    {'value': '2', 'label': '构造函数是类的一种特殊函数，它的方法名必须与类名相同'},
+                                    {'value': '3', 'label': '构造函数的主要作用是完成对类的对象的初始化工作'},
+                                    {'value': '4', 'label': '一般在创建新对象时，系统会自动调用构造函数'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '4. 若需要定义一个类域或类方法，应使用哪种修饰符',
+                                    'data'
+                            :
+                                [
+                                    {'value': '1', 'label': 'static'},
+                                    {'value': '2', 'label': 'package'},
+                                    {'value': 'right', 'label': 'private'},
+                                    {'value': '4', 'label': 'public'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '5. 下面哪个函数是public void  aMethod(){...}的重载函数',
+                                    'data'
+                            :
+                                [
+                                    {'value': '1', 'label': 'void  aMethod( ){...}'},
+                                    {'value': '2', 'label': 'public int  aMethod(){...}'},
+                                    {'value': '3', 'label': 'public void  aMethod ( ){...}'},
+                                    {'value': 'right', 'label': 'public int  aMethod ( int m){...}'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '6.  以下关于继承的叙述正确的是',
+                                    'data'
+                            :
+                                [
+                                    {'value': 'right', 'label': '在Java中类只允许单一继承'},
+                                    {'value': '2', 'label': '在Java中一个类只能实现一个接口'},
+                                    {'value': '3', 'label': '在Java中一个类不能同时继承一个类和实现一个接口'},
+                                    {'value': '4', 'label': '在Java中接口只允许单一继承'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '7. 在使用interface声明一个接口时，只可以使用（  ）修饰符修饰该接口',
+                                    'data'
+                            :
+                                [
+                                    {'value': '1', 'label': 'private'},
+                                    {'value': '2', 'label': 'protected'},
+                                    {'value': '3', 'label': 'private  protected'},
+                                    {'value': 'right', 'label': 'public'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '8. 有语句String s=”hello world”; ，以下操作哪个是不合法的？',
+                                    'data'
+                            :
+                                [
+                                    {'value': '1', 'label': 'int i=s.length();'},
+                                    {'value': 'right', 'label': 's>>>=3;'},
+                                    {'value': '3', 'label': 'String ts=s.trim(); '},
+                                    {'value': '4', 'label': 'String t=s+”!”;'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '9. 结构化程序设计所规定的三种基本控制结构是',
+                                    'data'
+                            :
+                                [
+                                    {'value': '1', 'label': '输入、处理、输出'},
+                                    {'value': '2', 'label': '树形、网形、环形'},
+                                    {'value': 'right', 'label': '顺序、选择、循环'},
+                                    {'value': '4', 'label': '主程序、子程序、函数'}
+                                ]
+                            },
+
+                            {
+                                'type'
+                            :
+                                'radio',
+                                    'label'
+                            :
+                                '10. 下列关于for循环和while循环的说法中哪个是正确的？',
+                                    'data'
+                            :
+                                [
+                                    {'value': '1', 'label': 'while循环能实现的操作，for循环也都能实现'},
+                                    {'value': 'right', 'label': 'while循环判断条件一般是程序结果，for循环判断条件一般是非程序结果'},
+                                    {'value': '3', 'label': '两种循环任何时候都可替换'},
+                                    {'value': '4', 'label': '两种循环结构中都必须有循环体，循环体不能为空'}
+                                ]
+                            },
+                                ],
+                                'title': '中级考试',
+                                'submitButton': {
+                                    'text': 'Send'
+                                },
+                                'onSubmit': submit2
+                            }
+                            //checkbox compare length
+                            React.renderComponent(
+                                FormView({data: data}), document.getElementById('midEx')
+                            );
+                            counting2.stop();
+                            $('#midEx').hide()
+                            $('#showDiv2').click(function () {
+                                $('#showDiv2').hide();
+                                $('#midEx').show();
+                                counting2.start();
+                            })
+            #highE.tab-pane.fade
+                html
+                    body
+                        // Jquery
+                        script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+                        // 最新版本的 Bootstrap 核心 CSS 文件
+                        link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css', integrity='`sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+                        // 可选的 Bootstrap 主题文件（一般不用引入）
+                        link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css', integrity='sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp', crossorigin='anonymous')
+                        // 最新的 Bootstrap 核心 JavaScript 文件
+                        script(src='https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+                        link(rel='stylesheet', href='http://www.bootcss.com/p/buttons/css/buttons.css')
+                        link(rel='stylesheet', href='/build/style.css')
+                        script(src='https://unpkg.com/vue@2.3.4')
+                        script(src='/build/countDown.js')
+                        script(src='/build/react.js')
+                        script(src='/build/reactToJson.js')
+                        #wrapContent
+                            h3 欢迎来到高级考试
+                            h3 当你准备好了，请按下面的GO
+                            h3 请认真阅读下面的内容
+                            h3 你将受益终生
+                            h5 1.点击"GO"之后计时器会开始计时
+                            h5 2.超出计时时间将没有分数
+                            h5 3.你将有5分钟答题时间
+                            h5 4.题目均为单选题
+                            h5 5.诚信考试，禁止百度
+                            a#showDiv3.button.button-caution.button-pill.button-giant Go
+                            #countdown3
+                            #highEx
+                        script.
+                            var _timeOut = false;
+                            var counting3 = $('#countdown3').countdown360({
+                                radius: 60.5,
+                                seconds: 300,
+                                strokeWidth: 15,
+                                fillStyle: '#2196f3',
+                                strokeStyle: '#ffeb3b',
+                                fontSize: 50,
+                                fontColor: '#ffffff',
+                                autostart: false,
+                                smooth: true,
+                                onComplete: function () {
+                                    alert("时辰到")
+                                    _timeOut = true;
+                                }
+                            })
+                            var _grade = 0;
+
+                            var submit3 = function (values) {
+                                if (!_timeOut) {
+                                    for (var i_temp = 0; i_temp < 2; i_temp++) {
+                                        if (values[i_temp] == 'right') {
+                                            _grade = _grade + 10
+                                        }
+                                    }
+                                }
+                                else _grade = 0;
+
+                                alert("你的成绩为"+_grade+"分，满分100分")
+                                localStorage.setItem("#{user.email}"+"high", _grade)
+                                counting3.stop();
+                            }
+                            var data = {
+                                'schema': [
+                                    {
+                                        'type': 'radio',
+                                        'label': '1.  下列哪些语句关于Java内存回收的说明是正确的? ',
+                                        'data': [
+                                            {'value': '1', 'label': '程序员必须创建一个线程来释放内存'},
+                                            {'value': 'right', 'label': '内存回收程序负责释放无用内存'},
+                                            {'value': '3', 'label': '内存回收程序允许程序员直接释放内存'},
+                                            {'value': '4', 'label': '内存回收程序可以在指定的时间释放内存对象'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '2. 关于被私有访问控制符private修饰的成员变量，以下说法正确的是',
+                                        'data': [
+                                            {'value': '1', 'label': '可以被三种类所引用：该类自身、与它在同一个包中的其他类、在其他包中的该类的子类'},
+                                            {'value': '2', 'label': '可以被两种类访问和引用：该类本身、该类的所有子类'},
+                                            {'value': 'right', 'label': '只能被该类自身所访问和修改'},
+                                            {'value': '4', 'label': '只能被同一个包中的类访问'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '3. 下列方法头中哪一个不与其他方法形成重载(overload)关系?',
+                                        'data': [
+                                            {'value': '1', 'label': 'void mmm()'},
+                                            {'value': '2', 'label': 'void mmm(int i)'},
+                                            {'value': '3', 'label': 'void mmm(String s)'},
+                                            {'value': 'right', 'label': 'int mm()'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '4. 设x为float型变量，y为double型变量，a为int型变量，b为long型变量， c为char型变量，则表达式x+y*a/x+b/y+c的值为(   )类型',
+                                        'data': [
+                                            {'value': '1', 'label': 'int'},
+                                            {'value': '2', 'label': 'long'},
+                                            {'value': 'right', 'label': 'double'},
+                                            {'value': '4', 'label': 'char'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '5. 要从文件"file.dat"中读出第10个字节到变量c中,下列哪个方法适合?',
+                                        'data': [
+                                            {
+                                                'value': '1',
+                                                'label': 'FileInputStream in=new FileInputStream("file.dat"); in.skip(9); int c=in.read();'
+                                            },
+                                            {
+                                                'value': '2',
+                                                'label': 'FileInputStream in=new FileInputStream("file.dat"); in.skip(10); int c=in.read();'
+                                            },
+                                            {
+                                                'value': '3',
+                                                'label': 'FileInputStream in=new FileInputStream("file.dat"); int c=in.read();'
+                                            },
+                                            {
+                                                'value': 'right',
+                                                'label': 'RandomAccessFile in=new RandomAccessFile("file.dat"); in.skip(9); int c=in.readByte(); '
+                                            }
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '6.  下列哪种异常是检查型异常，需要在编写程序时声明',
+                                        'data': [
+                                            {'value': '1', 'label': 'NullPointerException'},
+                                            {'value': '2', 'label': 'FileInputStream'},
+                                            {'value': 'right', 'label': 'FileNotFoundException'},
+                                            {'value': '4', 'label': 'IndexOutOfBoundsException'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '7. Java的集合框架中重要的接口java.util.Collection定义了许多方法。选项中哪个方法不是Collection接口所定义的？',
+                                        'data': [
+                                            {'value': '1', 'label': 'int size()'},
+                                            {'value': '2', 'label': 'boolean containsAll(Collection c)'},
+                                            {'value': 'right', 'label': 'compareTo(Object obj)'},
+                                            {'value': '4', 'label': 'boolean remove(Object obj)'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '8. 一个线程在任何时刻都处于某种线程状态（thread state）,例如运行状态、阻塞状态、就绪状态等。一个线程可以由选项中的哪种线程状态直接到达运行状态？',
+                                        'data': [
+                                            {'value': '1', 'label': '死亡状态'},
+                                            {'value': '2', 'label': '阻塞状态（对象lock池内）'},
+                                            {'value': '3', 'label': '阻塞状态（对象wait池内）'},
+                                            {'value': 'right', 'label': '就绪状态'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '9. 欲构造ArrayList类的一个实例，此类继承了List接口，下列哪个方法是正确的？',
+                                        'data': [
+                                            {'value': '1', 'label': 'ArrayList myList=new Object（）；'},
+                                            {'value': 'right', 'label': 'List myList=new ArrayList（）；'},
+                                            {'value': '3', 'label': 'ArrayList myList=new List（）；'},
+                                            {'value': '4', 'label': 'List myList=new List（）；'}
+                                        ]
+                                    },
+
+                                    {
+                                        'type': 'radio',
+                                        'label': '10. 关于被私有访问控制符private修饰的成员变量，以下说法正确的是',
+                                        'data': [
+                                            {'value': '1', 'label': '可以被三种类所引用：该类自身、与它在同一个包中的其他类、在其他包中的该类的子类'},
+                                            {'value': '2', 'label': '可以被两种类访问和引用：该类本身、该类的所有子类'},
+                                            {'value': 'right', 'label': '只能被该类自身所访问和修改'},
+                                            {'value': '4', 'label': '只能被同一个包中的类访问'}
+                                        ]
+                                    },
+                                ],
+                                'title': '高级考试',
+                                'submitButton': {
+                                    'text': 'Send'
+                                },
+                                'onSubmit': submit3
+                            }
+                            //checkbox compare length
+                            React.renderComponent(
+                                FormView({data: data}), document.getElementById('highEx')
+                            );
+                            counting3.stop();
+                            $('#highEx').hide()
+                            $('#showDiv3').click(function () {
+                                $('#showDiv3').hide();
+                                $('#highEx').show();
+                                counting3.start();
+                            })
+
+
+
+
+

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  if !user
+    h1 Home Page
+    p.lead Java考试，开心每一天，祝你好运
+    hr
+    .row
+      .col-sm-6
+        h2 Welcome!
+        h3 欢迎来到Java在线考试！
+        img(height='500', width='1000' src='/build/java-pic-2.jpg', alt='java-pic')
+
+  else
+    h1 Welcome #{user.email}!
+    h3 欢迎来到Java在线考试！
+    img(height='400', width='800' src='/build/java-pic-2.jpg', alt='java-pic')
+

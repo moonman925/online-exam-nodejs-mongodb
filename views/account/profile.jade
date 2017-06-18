@@ -1,0 +1,88 @@
+extends ../layout
+
+block content
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+    // 最新版本的 Bootstrap 核心 CSS 文件
+    link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css', integrity='`sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+    // 可选的 Bootstrap 主题文件（一般不用引入）
+    link(rel='stylesheet', href='https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css', integrity='sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp', crossorigin='anonymous')
+    // 最新的 Bootstrap 核心 JavaScript 文件
+    script(src='https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+    link(rel='stylesheet', href='http://www.bootcss.com/p/buttons/css/buttons.css')
+  .page-header
+    h3 用户信息
+  script.
+      $(document).ready(function(){
+          $('#refresh').click(function () {
+              $('#lgrade').val(localStorage.getItem('#{user.email}'+'low'));
+              $('#mgrade').val(localStorage.getItem('#{user.email}'+'mid'));
+              $('#hgrade').val(localStorage.getItem('#{user.email}'+'high'));
+
+          })
+      })
+
+  form.form-horizontal(action='/account/profile', method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    h4 用户：ww@ww.com
+    .form-group
+      label.col-sm-3.control-label(for='lgrade') 低级
+      .col-sm-7
+        input.form-control(type='text', name='lgrade', id='lgrade', value='30', disabled)
+    .form-group
+      label.col-sm-3.control-label(for='mgrade') 中级
+      .col-sm-7
+        input.form-control(type='text', name='mgrade', id='mgrade', value='0', disabled)
+    .form-group
+      label.col-sm-3.control-label(for='hgrade') 高级
+      .col-sm-7
+        input.form-control(type='text', name='hgrade', id='hgrade', value='40', disabled)
+    .form-group
+      label.col-sm-3.control-label(for='refresh')
+      .col-sm-7
+        input.button.button-rounded.button-small(type='button', name='refresh',id='refresh',value='删除')
+    h4 用户：qq@qq.com
+      .form-group
+        label.col-sm-3.control-label(for='lgrade') 低级
+        .col-sm-7
+          input.form-control(type='text', name='lgrade', id='lgrade1', value='30', disabled)
+      .form-group
+        label.col-sm-3.control-label(for='mgrade') 中级
+        .col-sm-7
+          input.form-control(type='text', name='mgrade', id='mgrade1', value='0', disabled)
+      .form-group
+        label.col-sm-3.control-label(for='hgrade') 高级
+        .col-sm-7
+          input.form-control(type='text', name='hgrade', id='hgrade1', value='40', disabled)
+      .form-group
+        label.col-sm-3.control-label(for='refresh')
+        .col-sm-7
+          input.button.button-rounded.button-small(type='button', name='refresh',id='refresh1',value='删除')
+    h4 用户：qqq@qq.com
+      .form-group
+        label.col-sm-3.control-label(for='lgrade') 低级
+        .col-sm-7
+          input.form-control(type='text', name='lgrade', id='lgrade2', value='30', disabled)
+      .form-group
+        label.col-sm-3.control-label(for='mgrade') 中级
+        .col-sm-7
+          input.form-control(type='text', name='mgrade', id='mgrade2', value='0', disabled)
+      .form-group
+        label.col-sm-3.control-label(for='hgrade') 高级
+        .col-sm-7
+          input.form-control(type='text', name='hgrade', id='hgrade2', value='40', disabled)
+      .form-group
+        label.col-sm-3.control-label(for='refresh')
+        .col-sm-7
+          input.button.button-rounded.button-small(type='button', name='refresh',id='refresh2',value='删除')
+  .page-header
+    h3 不留痕迹
+
+  form.form-horizontal(action='/account/delete', method='POST')
+    .form-group
+      p.col-sm-offset-3.col-sm-4 删除数据，为数据库创造更多空间造福他人
+      input(type='hidden', name='_csrf', value=_csrf)
+      .col-sm-offset-3.col-sm-4
+        button.btn.btn-danger(type='submit')
+          i.fa.fa-trash
+          | 删除账号
+
