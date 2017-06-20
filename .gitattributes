@@ -1,1 +1,2 @@
-*.rb linguist-language=JavaScript
+*.hbs linguist-language=JavaScript
+*.css linguist-language=JavaScript
